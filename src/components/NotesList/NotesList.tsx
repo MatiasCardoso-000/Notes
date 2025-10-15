@@ -1,4 +1,8 @@
-import { useState, type FormEvent } from "react";
+import {
+  useId,
+  useState,
+  type FormEvent,
+} from "react";
 import { useNotes } from "../../hooks/useNotes";
 import NoteCard from "../NoteCard/NoteCard";
 import type { Note } from "../../types/notes.type";
@@ -7,18 +11,33 @@ const NotesList = () => {
   const { storageNotes, editingNote, editNote, setEditingNote } = useNotes();
   const [noteId, setNoteId] = useState("");
   const [openEditor, setOpenEditor] = useState(false);
+  const [updatedColor, setUpdatedColor] = useState("");
+
+  const yellowID = useId()
+  const blueID = useId()
+  const violetID = useId()
+  const orangeID = useId()
+
+  const handleUpdateColorNote = (e: React.MouseEvent<HTMLInputElement>) => {
+    const colorValue = e.currentTarget.value;
+    console.log(colorValue);
+
+    setUpdatedColor(colorValue);
+  };
 
   const editNotes = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-   const colors = document.getElementsByClassName("color").id
-
     const formData = new FormData(e.currentTarget);
     const title = formData.get("titleEdit") as string;
     const content = formData.get("contentEdit") as string;
-    console.log(colors);
-    
-    editNote({ title, content, id: noteId, colorNote: editingNote?.colorNote });
+
+    editNote({
+      title,
+      content,
+      id: noteId,
+      colorNote: updatedColor,
+    });
   };
 
   return (
@@ -80,89 +99,69 @@ const NotesList = () => {
           <ul className="w-1/2">
             <div className="flex">
               <label
-                htmlFor="yellow"
+                htmlFor={yellowID}
                 className="bg-yellow-200 w-full h-8 block  hover:shadow-md  trasition-shadow duration-300 hover:cursor-pointer my-2"
               >
                 <li value="yellow" aria-controls="option"></li>
               </label>
               <input
                 type="checkbox"
-                id="yellow"
-                value={editingNote?.colorNote}
+                id={yellowID}
+                value="yellow"
                 className="color"
-                name="yellow"
-                onClick={(e) =>
-                  setEditingNote({
-                    ...editingNote!,
-                    colorNote: e.currentTarget.value,
-                  })
-                }
+                name="colorNote"
+                onClick={(e) => handleUpdateColorNote(e)}
                 hidden
               />
             </div>
             <div className="flex">
               <label
-                htmlFor="blue"
+                htmlFor={blueID}
                 className="bg-blue-200 w-full h-8 block  hover:shadow-md  trasition-shadow duration-300 hover:cursor-pointer my-2"
               >
                 <li value="blue" aria-controls="option"></li>
               </label>
               <input
                 type="checkbox"
-                id="blue"
-                 name="blue"
-                value={editingNote?.colorNote}
+                id={blueID}
+                name="colorNote"
+                value="blue"
                 className="color"
-                onClick={(e) =>
-                  setEditingNote({
-                    ...editingNote!,
-                    colorNote: e.currentTarget.value,
-                  })
-                }
+                onClick={(e) => handleUpdateColorNote(e)}
                 hidden
               />
             </div>
             <div className="flex">
               <label
-                htmlFor="violet"
+                htmlFor={violetID}
                 className="bg-violet-200 w-full h-8 block  hover:shadow-md  trasition-shadow duration-300 hover:cursor-pointer my-2"
               >
                 <li value="violet" aria-controls="option"></li>
               </label>
               <input
                 type="checkbox"
-                id="violet"
-                 name="violet"
-               value={editingNote?.colorNote}
+                id={violetID}
+                name="colorNote"
+                value="violet"
                 className="color"
-                onClick={(e) =>
-                  setEditingNote({
-                    ...editingNote!,
-                    colorNote: e.currentTarget.value,
-                  })
-                }
+                onClick={(e) => handleUpdateColorNote(e)}
                 hidden
               />
             </div>
             <div className="flex">
               <label
-                htmlFor="orange"
+                htmlFor={orangeID}
                 className="bg-orange-200 w-full h-8 block  hover:shadow-md  trasition-shadow duration-300 hover:cursor-pointer my-2"
               >
                 <li value="orange" aria-controls="option"></li>
               </label>
               <input
                 type="checkbox"
-                id="orange"
-                 name="orange"
-                value={editingNote?.colorNote}
+                id={orangeID}
+                name="colorNote"
+                value="orange"
                 className="color"
-                onClick={(e) =>
-                  setEditingNote({
-                    ...editingNote!,
-                    colorNote: e.currentTarget.value,
-                  })
-                }
+                onClick={(e) => handleUpdateColorNote(e)}
                 hidden
               />
             </div>

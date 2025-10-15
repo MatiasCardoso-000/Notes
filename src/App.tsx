@@ -9,6 +9,7 @@ const App = () => {
 
   const handleColorNote = (e: React.MouseEvent<HTMLInputElement> ) => {
     const colorValue = e.currentTarget.value
+    
     setColorNote(colorValue)
   }
 
@@ -102,7 +103,7 @@ const App = () => {
             </div>
           </aside>
           <main className="w-full md:wr-2/3 lg:w-3/4">
-            <NotesList />
+            <NotesList/>
           </main>
         </div>
       </div>
