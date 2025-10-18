@@ -1,27 +1,25 @@
-import {
-  useId,
-  useState,
-  type FormEvent,
-} from "react";
+import { useEffect, useId, useState, type FormEvent } from "react";
 import { useNotes } from "../../hooks/useNotes";
 import NoteCard from "../NoteCard/NoteCard";
 import type { Note } from "../../types/notes.type";
+import { useDragAndDrop } from "@formkit/drag-and-drop/react";
 
 const NotesList = () => {
-  const { storageNotes, editingNote, editNote, setEditingNote } = useNotes();
+  const { notes, editingNote, editNote, setEditingNote } = useNotes();
   const [noteId, setNoteId] = useState("");
   const [openEditor, setOpenEditor] = useState(false);
   const [updatedColor, setUpdatedColor] = useState("");
+  const [parent, tapes,_setValues, updateConfig] = useDragAndDrop<HTMLUListElement, Note>(
+    notes
+  );
 
-  const yellowID = useId()
-  const blueID = useId()
-  const violetID = useId()
-  const orangeID = useId()
+  const yellowID = useId();
+  const blueID = useId();
+  const violetID = useId();
+  const orangeID = useId();
 
   const handleUpdateColorNote = (e: React.MouseEvent<HTMLInputElement>) => {
     const colorValue = e.currentTarget.value;
-    console.log(colorValue);
-
     setUpdatedColor(colorValue);
   };
 
@@ -40,6 +38,10 @@ const NotesList = () => {
     });
   };
 
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(tapes));
+  }, [tapes]);
+
   return (
     <>
       {/* Formulario de Búsqueda */}
@@ -55,20 +57,24 @@ const NotesList = () => {
       </div>
 
       {/* Lista de Notas */}
-      <div className="notes-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {storageNotes.map((note: Note) => (
+      <ul
+        className="notes-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        ref={parent}
+      >
+        {tapes.map((tape) => (
           <NoteCard
-            key={note.id}
-            {...note}
+            key={tape.id}
+            {...tape}
             setNoteId={setNoteId}
             setOpenEditor={setOpenEditor}
             openEditor={openEditor}
+            updateConfig={updateConfig}
           />
         ))}
-      </div>
+      </ul>
       <div
         className={
-          openEditor && storageNotes.some((n) => n.id === noteId)
+          openEditor && notes.some((n) => n.id === noteId)
             ? " note-card shadow border-t-8 border-blue-500  px-4 py-6 mt-8 flex flex-col gap-3 cursor-pointer"
             : "hidden"
         }

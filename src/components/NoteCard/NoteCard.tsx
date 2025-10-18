@@ -3,6 +3,7 @@ import { FaPencilAlt } from "react-icons/fa";
 import { BsPinAngleFill } from "react-icons/bs";
 import { useNotes } from "../../hooks/useNotes";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import type { Note } from "../../types/notes.type";
 
 interface NoteCardProps {
   title: string;
@@ -12,6 +13,7 @@ interface NoteCardProps {
   setNoteId: Dispatch<SetStateAction<string>>;
   setOpenEditor: Dispatch<SetStateAction<boolean>>;
   openEditor: boolean;
+  updateConfig: Dispatch<SetStateAction<Note>>;
 }
 
 const NoteCard = ({
@@ -22,25 +24,31 @@ const NoteCard = ({
   setNoteId,
   setOpenEditor,
   openEditor,
+  updateConfig,
 }: NoteCardProps) => {
   const { deleteNote, setEditingNote } = useNotes();
   const [isPinned, setIsPinned] = useState<boolean>(false);
 
-  const handlePinnedNote = () => {
-    setIsPinned(!isPinned)
-  }
 
+  
+  const handlePinnedNote = () => {
+    setIsPinned(!isPinned);
+    updateConfig({ isPinned: !isPinned });
+  };
 
   return (
     <>
-      <div
-        className={`relative shadow-md hover:shadow-xl transition-shadow duration-300 p-5 flex flex-col border-l-4 border-transparent hover:border-blue-500 ${
-          colorNote ? `bg-${colorNote}-200` : "yellow"
+      <li
+        className={`relative shadow-md hover:shadow-xl transition-shadow duration-300 p-5 flex flex-col border-l-4 border-transparent hover:border-blue-500 cursor-pointer ${
+          colorNote ? `bg-${colorNote}-200` : "bg-white"
         }`}
+        data-label={title}
       >
         <button onClick={handlePinnedNote}>
           <BsPinAngleFill
-            className={`absolute top-2 right-2  ${isPinned ?" text-black" : "text-gray-400"} `}
+            className={`absolute top-2 right-2  ${
+              isPinned ? " text-black" : "text-gray-400"
+            } `}
             size={20}
           />
         </button>
@@ -71,7 +79,7 @@ const NoteCard = ({
             <FaPencilAlt size={16} />
           </button>
         </div>
-      </div>
+      </li>
     </>
   );
 };

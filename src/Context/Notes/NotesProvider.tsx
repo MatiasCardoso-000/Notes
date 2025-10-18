@@ -14,10 +14,6 @@ export const NotesProvider = ({ children }: NotesProviderProps) => {
 
   const [editingNote, setEditingNote] = useState<Note | null>(null);
 
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
-
   const addNotes = (note: Note) => {
     if (!note.title) {
       alert("Debe agregar un titulo para la nota.");
@@ -46,6 +42,10 @@ export const NotesProvider = ({ children }: NotesProviderProps) => {
     setNotes(notesUpdated);
   };
 
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
   const deleteNote = (id: string) => {
     const notesUpdated = notes.filter((n) => n.id !== id);
     setNotes(notesUpdated);
@@ -55,7 +55,6 @@ export const NotesProvider = ({ children }: NotesProviderProps) => {
     <NotesContext.Provider
       value={{
         notes,
-        storageNotes: notes, // Ahora storageNotes es simplemente notes
         addNotes,
         editNote,
         deleteNote,
